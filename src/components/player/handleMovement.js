@@ -2,27 +2,29 @@ import store from '../../stores/store';
 
 const handleMovement = () => {
 
+  const dispatchMove = (dir) => {
+    return store.dispatch({
+      type: dir,
+    });
+  }
+
+  const canMoveToThisPlace = (dir, pos, map) => {
+
+  }
+
   const determineMoveDirection = (code) => {
     switch(code){
       case "ArrowRight":
-        return store.dispatch({
-          type: "MOVE_PLAYER_RIGHT",
-        });
+        return dispatchMove("MOVE_PLAYER_RIGHT");
 
       case "ArrowLeft":
-        return store.dispatch({
-          type: "MOVE_PLAYER_LEFT",
-        });
+        return dispatchMove("MOVE_PLAYER_LEFT");
 
       case "ArrowUp":
-        return store.dispatch({
-          type: "MOVE_PLAYER_UP",
-        });
+        return dispatchMove("MOVE_PLAYER_UP");
 
       case "ArrowDown":
-        return store.dispatch({
-          type: "MOVE_PLAYER_DOWN",
-        });
+        return dispatchMove("MOVE_PLAYER_DOWN");
     }
   }
 
