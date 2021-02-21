@@ -15,7 +15,7 @@ const initialState = {
     up: false,
     down: false
   },
-  walkSpeed: 32,
+  walkSpeed: 2,
 }
 
 const playerReducer = (state = initialState, action) => {
