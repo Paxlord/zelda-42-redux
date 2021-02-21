@@ -26,8 +26,22 @@ const handleMovement = () => {
     }
   }
 
+  const stopMovement = (code) => {
+    if(code === "ArrowRight" || code === "ArrowLeft"  || code === "ArrowUp"  || code === "ArrowDown" ){
+      return store.dispatch({
+        type: "STOP_MOVEMENT",
+      })
+    }
+
+    return null;
+  }
+
   window.addEventListener("keydown", (e) => {
     determineMoveDirection(e.code);
+  });
+
+  window.addEventListener("keyup", (e) => {
+    stopMovement(e.code);
   });
 }
 

@@ -1,8 +1,12 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import characterSprite from '../../assets/spritesheets/characters.png';
+import characterSprite from '../../assets/spritesheets/hercules.png';
 
 import handleMovement from './handleMovement';
+
+let step = 0;
+let animationSpeed = 8;
+let animationCounter = 0;
 
 class Player extends Component{
 
@@ -15,6 +19,26 @@ class Player extends Component{
   }
 
   render(){
+
+
+    animationCounter++;
+
+    if(animationCounter === animationSpeed){
+      if(this.props.moving){
+        step += 32;
+      }
+
+      if(step > 32 * 4){
+        step = 0;
+      }
+
+      animationCounter = 0;
+    }
+
+    if(!this.props.moving){
+      step = 0;
+    }
+
     return(
       <div tabIndex="0" onKeyDown={() => console.log("keydown")}>
         <div
@@ -22,9 +46,9 @@ class Player extends Component{
             position: "absolute",
             top: this.props.position.y,
             left: this.props.position.x,
-            background: `url('${characterSprite}') 0 0`,
+            background: `url('${characterSprite}') ${step}px ${this.props.facing}px`,
             width: '32px',
-            height: '32px'
+            height: '48px'
           }}
         />
       </div>

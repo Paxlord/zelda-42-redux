@@ -3,19 +3,9 @@ const initialState = {
     x: 32,
     y: 32
   },
-  moving: {
-    left: false,
-    right: false,
-    up: false,
-    down: false
-  },
-  facing: {
-    left: false,
-    right: false,
-    up: false,
-    down: false
-  },
-  walkSpeed: 2,
+  moving: false,
+  facing: 0,
+  walkSpeed: 4,
 }
 
 const playerReducer = (state = initialState, action) => {
@@ -32,6 +22,12 @@ const playerReducer = (state = initialState, action) => {
     case "MOVE_PLAYER_UP":
       return movePlayer(state, "UP");
 
+    case "STOP_MOVEMENT":
+      return {
+        ...state,
+        moving: false
+      }
+
     default:
       return state;
   }
@@ -46,7 +42,9 @@ const movePlayer = (state, dir) => {
         position: {
           ...state.position,
           x: state.position.x + state.walkSpeed
-        }
+        },
+        moving: true,
+        facing: 96
       }
     case "LEFT":
       return {
@@ -54,7 +52,9 @@ const movePlayer = (state, dir) => {
         position: {
           ...state.position,
           x: state.position.x - state.walkSpeed
-        }
+        },
+        moving: true,
+        facing: 144
       }
     case "UP":
       return {
@@ -62,7 +62,9 @@ const movePlayer = (state, dir) => {
         position: {
           ...state.position,
           y: state.position.y - state.walkSpeed
-        }
+        },
+        moving: true,
+        facing: 48
       }
     case "DOWN":
       return {
@@ -70,7 +72,9 @@ const movePlayer = (state, dir) => {
         position: {
           ...state.position,
           y: state.position.y + state.walkSpeed
-        }
+        },
+        moving: true,
+        facing: 0
       }
   }
 
