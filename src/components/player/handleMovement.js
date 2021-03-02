@@ -86,7 +86,7 @@ export const determineMoveDirection = (code) => {
 export const stopMovement = (code) => {
   if(code === "ArrowRight" || code === "ArrowLeft"  || code === "ArrowUp"  || code === "ArrowDown" ){
     return store.dispatch({
-      type: "STOP_MOVEMENT",
+      type: "STOP_ACTION",
     })
   }
 

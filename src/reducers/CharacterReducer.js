@@ -36,7 +36,7 @@ const playerReducer = (state = initialState, action) => {
     case "MOVE_PLAYER_UP":
       return movePlayer(state, "UP");
 
-    case "STOP_MOVEMENT":
+    case "STOP_ACTION":
       return {
         ...state,
         current_state: state.state_machine.IDLE,
@@ -47,6 +47,13 @@ const playerReducer = (state = initialState, action) => {
         ...state,
         money: state.money + action.payload.amount
       }
+
+    case "ATTACK":
+        return {
+          ...state,
+          current_state: state.state_machine.ATTACKING,
+        }
+  
 
     default:
       return state;

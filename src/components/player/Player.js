@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
+import store from '../../stores/store';
+
 import characterSprite from '../../assets/spritesheets/hercules.png';
+import sword_slash from '../../assets/spritesheets/sword_slash.png';
 
 import {determineMoveDirection, stopMovement} from './handleMovement';
 import { isCollidingWithRubies } from './interactibleInteractions';
@@ -10,6 +13,7 @@ let animationSpeed = 8;
 let animationCounter = 0;
 let keyPressed = null;
 let lastKeyPressed = null;
+let attackTime = 12;
 
 class Player extends Component{
 
@@ -33,11 +37,7 @@ class Player extends Component{
 
       isCollidingWithRubies();
 
-      if(keyPressed){
-        determineMoveDirection(keyPressed);
-      }else{
-        stopMovement(lastKeyPressed);
-      }
+      
 
       animationCounter++;
 
@@ -52,24 +52,83 @@ class Player extends Component{
             animationCounter = 0;
           }
 
+          if(keyPressed){
+            if(keyPressed === "ArrowRight" || keyPressed === "ArrowLeft"  || keyPressed === "ArrowUp"  || keyPressed === "ArrowDown")
+              determineMoveDirection(keyPressed);
+
+            if(keyPressed === "Space"){
+              store.dispatch({
+                type: "ATTACK"
+              });
+              attackTime = 12;
+            }
+
+          }else{
+            stopMovement(lastKeyPressed);
+          }
+
           break;
 
         case this.props.state_machine.IDLE:
           step=0;
+
+          if(keyPressed){
+            if(keyPressed === "ArrowRight" || keyPressed === "ArrowLeft"  || keyPressed === "ArrowUp"  || keyPressed === "ArrowDown")
+              determineMoveDirection(keyPressed);
+            
+            if(keyPressed === "Space"){
+              store.dispatch({
+                type: "ATTACK"
+              });
+              attackTime = 12;
+            }
+
+          }else{
+            stopMovement(lastKeyPressed);
+          }
+
           break;
 
         case this.props.state_machine.ATTACKING:
+
+          attackTime--;
+          if(attackTime <= 0){
+            store.dispatch({
+              type: "STOP_ACTION"
+            });
+          }
+
           break;
     }
   }, 16);
   }
 
+  GetAttackPos(){
+    switch(this.props.facing){
+      case 0:
+        return {
+          x: this.props.position.x,
+          y: this.props.position.y + this.props.size.y
+        };
+      case 48:
+        return {
+          x: this.props.position.x,
+          y: this.props.position.y - 32
+        };
+      case 96:
+        return {
+          x: this.props.position.x + this.props.size.x,
+          y: this.props.position.y
+        };
+      case 144:
+        return {
+          x: this.props.position.x - 32,
+          y: this.props.position.y
+        };
+    }
+  }
+
   render(){
-
-
-    
-    
-
     return(
       <div tabIndex="0" onKeyDown={() => console.log("keydown")}>
         <div
@@ -82,6 +141,18 @@ class Player extends Component{
             height: '48px'
           }}
         />
+        {(this.props.current_state === this.props.state_machine.ATTACKING) && 
+          <div
+            style={{ 
+              position: "absolute",
+              top: this.GetAttackPos().y,
+              left: this.GetAttackPos().x,
+              background: `url('${sword_slash}') 0px 0px`,
+              width: '32px',
+              height: '32px'
+            }}
+          />
+        }
       </div>
     )
   }
