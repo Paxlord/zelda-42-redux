@@ -2,11 +2,13 @@ import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import characterSprite from '../../assets/spritesheets/hercules.png';
 
-import handleMovement from './handleMovement';
+import {determineMoveDirection, stopMovement} from './handleMovement';
 
 let step = 0;
-let animationSpeed = 12;
+let animationSpeed = 8;
 let animationCounter = 0;
+let keyPressed = null;
+let lastKeyPressed = null;
 
 class Player extends Component{
 
@@ -15,35 +17,54 @@ class Player extends Component{
   }
 
   componentDidMount(){
-    handleMovement();
+    window.addEventListener("keydown", (e) => {
+      e.preventDefault();
+      keyPressed = e.code;
+    });
+  
+    window.addEventListener("keyup", (e) => {
+      e.preventDefault();
+      lastKeyPressed = e.code;
+      keyPressed = null;
+    });
+
+    setInterval(() => { 
+
+      if(keyPressed){
+        determineMoveDirection(keyPressed);
+      }else{
+        stopMovement(lastKeyPressed);
+      }
+
+      animationCounter++;
+
+      switch(this.props.current_state){
+        case this.props.state_machine.MOVING:
+
+          if(animationCounter%animationSpeed === 0){
+            step += 32;
+            if(step > 32 * 4){
+              step = 0;
+            }
+            animationCounter = 0;
+          }
+
+          break;
+
+        case this.props.state_machine.IDLE:
+          step=0;
+          break;
+
+        case this.props.state_machine.ATTACKING:
+          break;
+    }
+  }, 16);
   }
 
   render(){
 
 
-    animationCounter++;
-
-    switch(this.props.current_state){
-      case this.props.state_machine.MOVING:
-
-        if(animationCounter%animationSpeed === 0){
-          step += 32;
-          if(step > 32 * 4){
-            step = 0;
-          }
-          animationCounter = 0;
-        }
-
-        break;
-
-      case this.props.state_machine.IDLE:
-        step=0;
-        break;
-
-      case this.props.state_machine.ATTACKING:
-        break;
-    }
-
+    
     
 
     return(
@@ -62,6 +83,8 @@ class Player extends Component{
     )
   }
 }
+
+
 
 const mapStateToProps = (state) => {
   return {

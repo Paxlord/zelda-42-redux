@@ -1,22 +1,24 @@
+import { convertWorldToScreenCoords } from '../utils/coordutils';
+
 const initialState = {
   current_rubies: [
     
   ],
   sprite_atlas: [
     {
-      key: 'green',
+      key: 'red',
       coord: "0px 0px",
       amount: 20
     },
     {
-      key: 'red',
-      coord: "32px 0px",
-      solid: 60
+      key: 'green',
+      coord: "64px 0px",
+      amount: 60
     },
     {
       key: 'gold',
-      coord: "64px 0px",
-      solid: 120
+      coord: "32px 0px",
+      amount: 120
     }
   ],
 }
@@ -34,22 +36,22 @@ const RubyReducer = (state = initialState, action) => {
 
 const add_ruby = (state, action) => {
   const { type, pos } = action.payload;
-  let oldRubyArray = state.current_rubies;
+  let oldRubyArray = [...state.current_rubies];
   let rubySpriteIndex = null;
 
   switch(type){
     case 'green':
-      rubySpriteIndex = 0;
+      rubySpriteIndex = 1;
       break; 
     case 'red':
-      rubySpriteIndex = 1;
+      rubySpriteIndex = 0;
       break;
     case 'gold':
       rubySpriteIndex = 2;
       break;
   }
 
-  oldRubyArray.push({ id: oldRubyArray.length - 1, pos, item_index: rubySpriteIndex  });
+  oldRubyArray.push({ id: oldRubyArray.length > 0 ? oldRubyArray.length - 1 : 0, pos: convertWorldToScreenCoords(pos.x, pos.y), item_index: rubySpriteIndex  });
 
   return {
     ...state,

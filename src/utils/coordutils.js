@@ -1,3 +1,5 @@
+import gameConstants from '../stores/constants';
+
 export const convertScreenToWorldCoords = (posX, posY) => {
   return {
     x: Math.floor( posX / gameConstants.TILE_SIZE ),
@@ -7,7 +9,7 @@ export const convertScreenToWorldCoords = (posX, posY) => {
 
 export const convertWorldToScreenCoords = (posX, posY) => {
   return {
-    x: posX / gameConstants.TILE_SIZE,
-    y: posY / gameConstants.TILE_SIZE
+    x: posX * gameConstants.TILE_SIZE,
+    y: posY * gameConstants.TILE_SIZE
   }
 }

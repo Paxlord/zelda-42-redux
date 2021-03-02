@@ -4,7 +4,7 @@ const initialState = {
     y: 32
   },
   facing: 0,
-  walkSpeed: 4,
+  walkSpeed: 3,
 
   state_machine : {
     ATTACKING: "ATTACKING",
@@ -15,7 +15,7 @@ const initialState = {
   current_state: "IDLE",
   money: 0,
   inventory: []
-  
+
 }
 
 const playerReducer = (state = initialState, action) => {

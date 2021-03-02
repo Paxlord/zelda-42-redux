@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
+import store from '../../stores/store';
 
 import Player from '../player/Player';
 import Map from '../tilemap/tilemap';
+import Rubies from '../interactibles/rubies'; 
 
 class GameWorld extends Component{
 
@@ -10,10 +12,24 @@ class GameWorld extends Component{
     super(props);
   }
 
+  componentDidMount(){
+    store.dispatch({
+      type: 'GENERATE_RUBY',
+      payload: {
+        type: "gold",
+        pos: {
+          x: 5,
+          y: 5
+        }
+      }
+    })
+  }
+
   render(){
     return(
       <div>
         <Map level_key={this.props.current_level_key}/>
+        <Rubies />
         <Player/>
       </div>
     )
@@ -23,7 +39,6 @@ class GameWorld extends Component{
 const mapStateToProps = (state) => {
   return {
     ...state.map,
-    ...state.rubies
   }
 }
 
