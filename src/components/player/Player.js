@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import characterSprite from '../../assets/spritesheets/hercules.png';
 
 import {determineMoveDirection, stopMovement} from './handleMovement';
+import { isCollidingWithRubies } from './interactibleInteractions';
 
 let step = 0;
 let animationSpeed = 8;
@@ -29,6 +30,8 @@ class Player extends Component{
     });
 
     setInterval(() => { 
+
+      isCollidingWithRubies();
 
       if(keyPressed){
         determineMoveDirection(keyPressed);

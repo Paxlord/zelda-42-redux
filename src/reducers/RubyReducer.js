@@ -60,8 +60,14 @@ const add_ruby = (state, action) => {
 }
 
 const remove_ruby = (state, action) => {
+  const { id } = action.payload;
+
+  let oldRubyArray = [...state.current_rubies];
+  oldRubyArray.splice(id, 1);
+
   return {
-    ...state
+    ...state,
+    current_rubies: oldRubyArray,
   }
 }
 

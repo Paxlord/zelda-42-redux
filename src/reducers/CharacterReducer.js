@@ -3,6 +3,10 @@ const initialState = {
     x: 32,
     y: 32
   },
+  size: {
+    x: 32,
+    y: 48
+  },
   facing: 0,
   walkSpeed: 3,
 
@@ -36,6 +40,12 @@ const playerReducer = (state = initialState, action) => {
       return {
         ...state,
         current_state: state.state_machine.IDLE,
+      }
+
+    case "ADD_MONEY":
+      return {
+        ...state,
+        money: state.money + action.payload.amount
       }
 
     default:
