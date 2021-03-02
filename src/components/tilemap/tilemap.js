@@ -13,7 +13,7 @@ class TileMap extends Component{
     return(
       <div>
         { 
-          this.props.maps[this.props.current_level_key].map((row, r_index) => {
+          this.props.maps[this.props.level_key].map((row, r_index) => {
             return (
               <div>
                 { row.map((tile_key, c_index) => {

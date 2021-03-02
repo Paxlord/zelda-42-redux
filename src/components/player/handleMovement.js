@@ -19,7 +19,6 @@ const handleMovement = () => {
   const castDirection = (pos, sizeX, sizeY, dir, resolution, speed, mapArray, spriteAtlas) => {
 
     var castPosArray = [];
-    console.log(Math.floor(sizeY/resolution));
 
     switch(dir){
       case "RIGHT":
@@ -41,7 +40,6 @@ const handleMovement = () => {
       case "DOWN":
         for(let i = 0; i < resolution; i++){
           castPosArray.push(convertScreenToWorldCoords(pos.x + (i * Math.floor(sizeX/resolution)) , pos.y + sizeY + speed));
-          console.log(pos.y + sizeY + speed);
         }
         
         break;

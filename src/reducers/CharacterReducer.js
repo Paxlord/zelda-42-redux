@@ -12,7 +12,10 @@ const initialState = {
     IDLE: "IDLE"
   },
 
-  current_state: "IDLE"
+  current_state: "IDLE",
+  money: 0,
+  inventory: []
+  
 }
 
 const playerReducer = (state = initialState, action) => {

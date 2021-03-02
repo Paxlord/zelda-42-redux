@@ -13,12 +13,19 @@ class GameWorld extends Component{
   render(){
     return(
       <div>
-        <Map/>
-        <Player />
+        <Map level_key={this.props.current_level_key}/>
+        <Player/>
       </div>
     )
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    ...state.map,
+    ...state.rubies
+  }
+}
 
-export default GameWorld;
+
+export default connect(mapStateToProps)(GameWorld);

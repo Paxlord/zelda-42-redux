@@ -5,7 +5,7 @@ import characterSprite from '../../assets/spritesheets/hercules.png';
 import handleMovement from './handleMovement';
 
 let step = 0;
-let animationSpeed = 8;
+let animationSpeed = 12;
 let animationCounter = 0;
 
 class Player extends Component{
@@ -25,13 +25,12 @@ class Player extends Component{
 
     switch(this.props.current_state){
       case this.props.state_machine.MOVING:
-        step += 32;
 
-        if(animationCounter === animationSpeed){
+        if(animationCounter%animationSpeed === 0){
+          step += 32;
           if(step > 32 * 4){
             step = 0;
           }
-
           animationCounter = 0;
         }
 
@@ -44,6 +43,8 @@ class Player extends Component{
       case this.props.state_machine.ATTACKING:
         break;
     }
+
+    
 
     return(
       <div tabIndex="0" onKeyDown={() => console.log("keydown")}>
