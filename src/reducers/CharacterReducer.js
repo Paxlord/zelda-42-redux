@@ -3,9 +3,16 @@ const initialState = {
     x: 32,
     y: 32
   },
-  moving: false,
   facing: 0,
   walkSpeed: 4,
+
+  state_machine : {
+    ATTACKING: "ATTACKING",
+    MOVING: "MOVING",
+    IDLE: "IDLE"
+  },
+
+  current_state: "IDLE"
 }
 
 const playerReducer = (state = initialState, action) => {
@@ -25,7 +32,7 @@ const playerReducer = (state = initialState, action) => {
     case "STOP_MOVEMENT":
       return {
         ...state,
-        moving: false
+        current_state: state.state_machine.IDLE,
       }
 
     default:
@@ -43,7 +50,7 @@ const movePlayer = (state, dir) => {
           ...state.position,
           x: state.position.x + state.walkSpeed
         },
-        moving: true,
+        current_state: state.state_machine.MOVING,
         facing: 96
       }
     case "LEFT":
@@ -53,7 +60,7 @@ const movePlayer = (state, dir) => {
           ...state.position,
           x: state.position.x - state.walkSpeed
         },
-        moving: true,
+        current_state: state.state_machine.MOVING,
         facing: 144
       }
     case "UP":
@@ -63,7 +70,7 @@ const movePlayer = (state, dir) => {
           ...state.position,
           y: state.position.y - state.walkSpeed
         },
-        moving: true,
+        current_state: state.state_machine.MOVING,
         facing: 48
       }
     case "DOWN":
@@ -73,7 +80,7 @@ const movePlayer = (state, dir) => {
           ...state.position,
           y: state.position.y + state.walkSpeed
         },
-        moving: true,
+        current_state: state.state_machine.MOVING,
         facing: 0
       }
   }

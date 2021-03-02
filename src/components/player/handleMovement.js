@@ -1,4 +1,5 @@
 import store from '../../stores/store';
+import gameConstants from '../../stores/constants';
 
 const handleMovement = () => {
 
@@ -8,23 +9,81 @@ const handleMovement = () => {
     });
   }
 
-  const canMoveToThisPlace = (dir, pos, map) => {
+  const convertScreenToWorldCoords = (posX, posY) => {
+    return {
+      x: Math.floor( posX / gameConstants.TILE_SIZE ),
+      y: Math.floor( posY / gameConstants.TILE_SIZE )
+    }
+  }
 
+  const castDirection = (pos, sizeX, sizeY, dir, resolution, speed, mapArray, spriteAtlas) => {
+
+    var castPosArray = [];
+    console.log(Math.floor(sizeY/resolution));
+
+    switch(dir){
+      case "RIGHT":
+        for(let i = 0; i < resolution; i++){
+          castPosArray.push(convertScreenToWorldCoords(pos.x + sizeX + speed, pos.y + (i * Math.floor(sizeY/resolution))));
+        }
+        break;
+
+      case "LEFT":
+        for(let i = 0; i < resolution; i++){
+          castPosArray.push(convertScreenToWorldCoords(pos.x - speed, pos.y + (i * Math.floor(sizeY/resolution))));
+        }
+        break;
+      case "UP":
+        for(let i = 0; i < resolution; i++){
+          castPosArray.push(convertScreenToWorldCoords(pos.x + (i * Math.floor(sizeX/resolution)), pos.y - speed));
+        }
+        break;
+      case "DOWN":
+        for(let i = 0; i < resolution; i++){
+          castPosArray.push(convertScreenToWorldCoords(pos.x + (i * Math.floor(sizeX/resolution)) , pos.y + sizeY + speed));
+          console.log(pos.y + sizeY + speed);
+        }
+        
+        break;
+    }
+
+    for(let j = 0; j < castPosArray.length; j ++){
+      
+      if(spriteAtlas[mapArray[castPosArray[j].y][castPosArray[j].x]].solid){
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  const canMoveToThisPlace = (dir) => {
+
+      let oldPos = store.getState().player.position;
+      let currentMap = store.getState().map.maps[store.getState().map.current_level_key];
+      let currentAtlas = store.getState().map.sprite_atlas;
+
+      let moveAmount = store.getState().player.walkSpeed;
+
+      let sizeX = 32;
+      let sizeY = 48;
+
+      return !castDirection(oldPos, sizeX, sizeY, dir, 3, moveAmount, currentMap, currentAtlas);
   }
 
   const determineMoveDirection = (code) => {
     switch(code){
       case "ArrowRight":
-        return dispatchMove("MOVE_PLAYER_RIGHT");
+        return canMoveToThisPlace("RIGHT") && dispatchMove("MOVE_PLAYER_RIGHT");
 
       case "ArrowLeft":
-        return dispatchMove("MOVE_PLAYER_LEFT");
+        return canMoveToThisPlace("LEFT") && dispatchMove("MOVE_PLAYER_LEFT");
 
       case "ArrowUp":
-        return dispatchMove("MOVE_PLAYER_UP");
+        return canMoveToThisPlace("UP") && dispatchMove("MOVE_PLAYER_UP");
 
       case "ArrowDown":
-        return dispatchMove("MOVE_PLAYER_DOWN");
+        return canMoveToThisPlace("DOWN") && dispatchMove("MOVE_PLAYER_DOWN");
     }
   }
 

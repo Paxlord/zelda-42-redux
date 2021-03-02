@@ -23,20 +23,26 @@ class Player extends Component{
 
     animationCounter++;
 
-    if(animationCounter === animationSpeed){
-      if(this.props.moving){
+    switch(this.props.current_state){
+      case this.props.state_machine.MOVING:
         step += 32;
-      }
 
-      if(step > 32 * 4){
-        step = 0;
-      }
+        if(animationCounter === animationSpeed){
+          if(step > 32 * 4){
+            step = 0;
+          }
 
-      animationCounter = 0;
-    }
+          animationCounter = 0;
+        }
 
-    if(!this.props.moving){
-      step = 0;
+        break;
+
+      case this.props.state_machine.IDLE:
+        step=0;
+        break;
+
+      case this.props.state_machine.ATTACKING:
+        break;
     }
 
     return(

@@ -13,7 +13,7 @@ class GameWorld extends Component{
   render(){
     return(
       <div>
-        <Map level_key="level_1" />
+        <Map/>
         <Player />
       </div>
     )
