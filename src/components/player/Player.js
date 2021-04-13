@@ -21,6 +21,55 @@ class Player extends Component{
     super(props);
   }
 
+  MovingState(){
+    if(animationCounter%animationSpeed === 0){
+      step += 32;
+      if(step > 32 * 4){
+        step = 0;
+      }
+      animationCounter = 0;
+    }
+    if(keyPressed){
+      if(keyPressed === "ArrowRight" || keyPressed === "ArrowLeft"  || keyPressed === "ArrowUp"  || keyPressed === "ArrowDown")
+        determineMoveDirection(keyPressed);
+
+      if(keyPressed === "Space"){
+        store.dispatch({
+          type: "ATTACK"
+        });
+        attackTime = 12;
+      }
+    }else{
+      stopMovement(lastKeyPressed);
+    }
+  }
+
+  IdleState(){
+    step=0;
+    if(keyPressed){
+      if(keyPressed === "ArrowRight" || keyPressed === "ArrowLeft"  || keyPressed === "ArrowUp"  || keyPressed === "ArrowDown")
+        determineMoveDirection(keyPressed);
+      
+      if(keyPressed === "Space"){
+        store.dispatch({
+          type: "ATTACK"
+        });
+        attackTime = 12;
+      }
+    }else{
+      stopMovement(lastKeyPressed);
+    }
+  }
+
+  AttackingState(){
+    attackTime--;
+    if(attackTime <= 0){
+      store.dispatch({
+        type: "STOP_ACTION"
+      });
+    }
+  }
+
   componentDidMount(){
     window.addEventListener("keydown", (e) => {
       e.preventDefault();
@@ -41,52 +90,15 @@ class Player extends Component{
       switch(this.props.current_state){
 
         case this.props.state_machine.MOVING:
-          if(animationCounter%animationSpeed === 0){
-            step += 32;
-            if(step > 32 * 4){
-              step = 0;
-            }
-            animationCounter = 0;
-          }
-          if(keyPressed){
-            if(keyPressed === "ArrowRight" || keyPressed === "ArrowLeft"  || keyPressed === "ArrowUp"  || keyPressed === "ArrowDown")
-              determineMoveDirection(keyPressed);
-
-            if(keyPressed === "Space"){
-              store.dispatch({
-                type: "ATTACK"
-              });
-              attackTime = 12;
-            }
-          }else{
-            stopMovement(lastKeyPressed);
-          }
+          this.MovingState();
           break;
 
         case this.props.state_machine.IDLE:
-          step=0;
-          if(keyPressed){
-            if(keyPressed === "ArrowRight" || keyPressed === "ArrowLeft"  || keyPressed === "ArrowUp"  || keyPressed === "ArrowDown")
-              determineMoveDirection(keyPressed);
-            
-            if(keyPressed === "Space"){
-              store.dispatch({
-                type: "ATTACK"
-              });
-              attackTime = 12;
-            }
-          }else{
-            stopMovement(lastKeyPressed);
-          }
+          this.IdleState();
           break;
 
         case this.props.state_machine.ATTACKING:
-          attackTime--;
-          if(attackTime <= 0){
-            store.dispatch({
-              type: "STOP_ACTION"
-            });
-          }
+         this.AttackingState();
           break;
     }
   }, 16);
