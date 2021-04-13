@@ -49,10 +49,10 @@ const playerReducer = (state = initialState, action) => {
       }
 
     case "ATTACK":
-        return {
-          ...state,
-          current_state: state.state_machine.ATTACKING,
-        }
+      return {
+        ...state,
+        current_state: state.state_machine.ATTACKING,
+      }
   
 
     default:

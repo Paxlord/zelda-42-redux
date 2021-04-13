@@ -4,6 +4,7 @@ import store from '../../stores/store';
 
 import Player from '../player/Player';
 import Map from '../tilemap/tilemap';
+import DecorationsMap from '../decorationmap';
 import Rubies from '../interactibles/rubies'; 
 
 class GameWorld extends Component{
@@ -29,6 +30,7 @@ class GameWorld extends Component{
     return(
       <div>
         <Map level_key={this.props.current_level_key}/>
+        <DecorationsMap level_key={this.props.current_level_key} />
         <Rubies />
         <Player/>
       </div>
