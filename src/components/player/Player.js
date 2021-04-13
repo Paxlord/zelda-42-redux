@@ -36,14 +36,11 @@ class Player extends Component{
     setInterval(() => { 
 
       isCollidingWithRubies();
-
-      
-
       animationCounter++;
 
       switch(this.props.current_state){
-        case this.props.state_machine.MOVING:
 
+        case this.props.state_machine.MOVING:
           if(animationCounter%animationSpeed === 0){
             step += 32;
             if(step > 32 * 4){
@@ -51,7 +48,6 @@ class Player extends Component{
             }
             animationCounter = 0;
           }
-
           if(keyPressed){
             if(keyPressed === "ArrowRight" || keyPressed === "ArrowLeft"  || keyPressed === "ArrowUp"  || keyPressed === "ArrowDown")
               determineMoveDirection(keyPressed);
@@ -62,16 +58,13 @@ class Player extends Component{
               });
               attackTime = 12;
             }
-
           }else{
             stopMovement(lastKeyPressed);
           }
-
           break;
 
         case this.props.state_machine.IDLE:
           step=0;
-
           if(keyPressed){
             if(keyPressed === "ArrowRight" || keyPressed === "ArrowLeft"  || keyPressed === "ArrowUp"  || keyPressed === "ArrowDown")
               determineMoveDirection(keyPressed);
@@ -82,22 +75,18 @@ class Player extends Component{
               });
               attackTime = 12;
             }
-
           }else{
             stopMovement(lastKeyPressed);
           }
-
           break;
 
         case this.props.state_machine.ATTACKING:
-
           attackTime--;
           if(attackTime <= 0){
             store.dispatch({
               type: "STOP_ACTION"
             });
           }
-
           break;
     }
   }, 16);
